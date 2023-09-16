@@ -49,7 +49,10 @@ express와 mongoDB를 사용해 TODO CRUD에 필요한 API를 구현합니다.
   })
   ```
 - response(`res`) 객체 역시 메서드를 가짐 [(docs)](https://expressjs.com/en/guide/routing.html)
-  - `send`, `sendFile`, `json`, `render`, `redirect`, ...
+  - `status`, `send`, `sendFile`, `json`, `render`, `redirect`, ...
+    ```js
+    res.status(400).send({message: '실패했습니다'})
+    ```
   - res 메서드 중 하나를 반드시 호출해야 한다. (브라우저가 멈춤)
 
 
@@ -94,4 +97,40 @@ express와 mongoDB를 사용해 TODO CRUD에 필요한 API를 구현합니다.
     db.collections('post').insertOne({data}, function(err, res){...})
   }
   ```
-- 
+- DB 업데이트: update 메서드
+ - `updateOne()` 등
+ - 갱신 제한자(update operators): 문서의 부분 갱신 연산을 효율적으로 수행하는 데 사용되는 특수 키
+   - `$set`, `$inc`, `$unset`, ...
+
+### AJAX
+- 새로고침 없이 서버 요청을 구현하는 데 사용되는 JS 문법
+  - 페이지 전체가 아닌, 데이터가 업데이트된 UI만 갱신할 수 있음
+- `$.ajax()`: jQuery를 사용한 ajax 메서드 **(추후 jQuery 삭제 및 fetch로 수정 예정)**
+  ```js
+  $('.delete').click((e) => {
+    $.ajax({
+    method: 'DELETE',
+    url: '/delete',
+    data: {_id: e.target.dataset.id}
+    })
+      .done(function(res){...})
+      .fail(function(res){...})
+  })
+  ```
+  - method: 요청 메서드
+  - data: 요청 payload. 서버에서 req.body 필드로 확인
+  - url: 요청 엔드포인트
+  - 위 예시의 DELETE 요청의 경우, 페이지 UI 상의 변화는 없음. (페이지가 들고 있던 데이터의 값이 변한 게 없으므로)
+    - 따라서 강제로 페이지를 새로고침하거나, done 콜백 안에서 해당 엘리먼트를 삭제하는 식의 로직이 필요함
+
+### URL Parameter
+```js
+app.get('/detail/:id', function(req, res){
+  db.collection('post').findOne({_id: req.params.id}, function(err, _res){
+    res.render('detail.ejs', {post: _res})
+  })
+})
+```
+- `:{paramKey}`: url 파라미터
+  - 함수의 파라미터가 함수에서 사용되는 변수인 것처럼, url 파라미터 역시 해당 url의 변수와 같이 사용함
+- 서버에서 `req.params` 필드로 접근 가능

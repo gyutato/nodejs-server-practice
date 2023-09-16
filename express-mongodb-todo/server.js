@@ -34,7 +34,28 @@ app.get('/list', function(req, res){
   });
 })
 
+app.get('/detail/:id', function(req, res){
+  const _id = parseInt(req.params.id)
+  db.collection('post').findOne({_id}, function(err, _res){
+    res.render('detail.ejs', {data: _res})
+  })
+})
+
 app.post('/add', function(req, res){
   res.redirect('/write')
-  db.collection('post').insertOne(req.body, function(err, res){});
+  db.collection('counter').findOne({name: '게시물 갯수'}, function(err, res){
+    let count = res.totalPost
+    db.collection('post').insertOne({...req.body, _id: count + 1}, function(err, res){
+      db.collection('counter').updateOne({name: '게시물 갯수'}, {$inc: {totalPost: 1}}, function() {})
+    });
+  })
+
+})
+
+app.delete('/delete', function(req, res){
+  console.log(req.body)
+  req.body._id = parseInt(req.body._id)
+  db.collection('post').deleteOne(req.body, function(err, res){
+    console.log('삭제완료', req.body._id)
+  })
 })
