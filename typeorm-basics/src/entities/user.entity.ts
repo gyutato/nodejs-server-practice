@@ -50,7 +50,7 @@ export class UserModel {
 
   @OneToOne(() => ProfileModel, (profile) => profile.user, {
     /** if true, get the relation with find() method by default */
-    eager: true,
+    eager: false,
     /** if true, save the relation whenever the entity is saved */
     cascade: true,
     /** determines the policy for the deletion */
@@ -62,4 +62,9 @@ export class UserModel {
 
   @OneToMany(() => PostModel, (post) => post.author)
   posts: PostModel[];
+
+  @Column({
+    default: 0,
+  })
+  count: number;
 }
