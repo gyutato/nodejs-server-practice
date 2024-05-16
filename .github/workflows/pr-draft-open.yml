@@ -1,8 +1,6 @@
 name: Draft PR on Push
 
-on:
-  push:
-    branches: [main]
+on: [pull_request]
 
 jobs:
   create-draft-pr:
