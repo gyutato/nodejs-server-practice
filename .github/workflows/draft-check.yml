@@ -1,0 +1,33 @@
+name: draft check
+
+run-name: Check if the PR is draft (${{ github.event.pull_request.title }})
+
+on:
+  pull_request:
+    types: [opened, reopened, edited]
+
+jobs:
+  check-PR-title:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: checkPrTitle
+        name: check PR title
+        run: |
+          title="${{ github.event.pull_request.title }}"
+          if [[ $title == draft:* ]]; then
+            echo "isDraft=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: change PR status
+        run: |
+          isDraft=${{ steps.checkPrTitle.outputs.isDraft }}
+          prNo=${{ github.event.pull_request.number }}
+          if [[ $isDraft == true ]]; then
+            gh pr ready $prNo --undo
+          else
+            gh pr ready $prNo
+          fi
