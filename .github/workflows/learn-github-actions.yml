@@ -17,7 +17,7 @@ jobs:
       - id: checkPrTitle
         name: check PR title
         run: |
-          echo ${{ github.event.pull_request.diff_url }}"
+          echo ${{ github.event.pull_request.diff_url }}
           title="${{ github.event.pull_request.title }}"
           draft="draft:"
           echo "isDraft=false" >> "$GITHUB_OUTPUT"
