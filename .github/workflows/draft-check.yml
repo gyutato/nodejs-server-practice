@@ -1,5 +1,7 @@
 name: draft check
 
+run-name: Check if the PR \#${{ github.event.pull_request.number }} is draft
+
 on:
   pull_request:
     types: [opened, reopened, edited]
@@ -7,7 +9,6 @@ on:
 jobs:
   check-PR-title:
     runs-on: ubuntu-latest
-    name: Check if the PR is draft
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
