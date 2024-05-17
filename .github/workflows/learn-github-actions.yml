@@ -11,10 +11,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: |
+
+      - name: check PR title
+        run: |
           title="${{ github.event.pull_request.title }}"
           draft="draft:"
+          isDraft=false
           echo The Title of your PR is $title
           if [[ $title == draft:* ]]; then
             echo "It's there!"
+            isDraft=true
+          fi
+
+      - name: change PR status
+        run: |
+          if [[ $isDraft == true ]]; then
+            echo "it's draft"
           fi
