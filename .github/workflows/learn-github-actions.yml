@@ -38,4 +38,6 @@ jobs:
           isDraft=${{ needs.check-PR-title.outputs.isDraft }}
           if [[ isDraft ]]; then
             gh pr ready ${{ github.event.pull_request.number }} --undo
+          else
+            gh pr ready ${{ github.event.pull_request.number }}
           fi
