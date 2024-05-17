@@ -16,18 +16,16 @@ jobs:
         name: check PR title
         run: |
           title="${{ github.event.pull_request.title }}"
-          draft="draft:"
-          echo "isDraft=false" >> "$GITHUB_OUTPUT"
           if [[ $title == draft:* ]]; then
-            echo "It's there!"
             echo "isDraft=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: change PR status
         run: |
           isDraft=${{ steps.checkPrTitle.outputs.isDraft }}
+          prNo=${{ github.event.pull_request.number }}
           if [[ $isDraft == true ]]; then
-            gh pr ready ${{ github.event.pull_request.number }} --undo
+            gh pr ready $prNo --undo
           else
-            gh pr ready ${{ github.event.pull_request.number }}
+            gh pr ready $prNo
           fi
