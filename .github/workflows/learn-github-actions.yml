@@ -9,20 +9,22 @@ on:
 jobs:
   check-PR-title:
     runs-on: ubuntu-latest
+    outputs:
+      isDraft: ${{ steps.checkPrTitle.isDraft }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: check PR title
+      - id: checkPrTitle
+        name: check PR title
         run: |
           title="${{ github.event.pull_request.title }}"
           draft="draft:"
-          isDraft=false
           echo The Title of your PR is $title
           if [[ $title == draft:* ]]; then
             echo "It's there!"
-            isDraft=true
+            echo "isDraft=hello" >> "$GITHUB_OUTPUT"
           fi
 
       - name: change PR status
         run: |
-          echo $isDraft
+          echo ${{ needs.checkPrTitle.outputs.isDraft }}
