@@ -15,7 +15,7 @@ jobs:
           TITLE: ${{ github.event.pull_request.title }}
           DRAFT: "draft:"
       - run: |
-          echo The Title of your PR is $TITLE
+          echo The Title of your PR is "$TITLE"
           if [[ $TITLE == $DRAFT* ]]; then
             echo "It's there!"
           fi
