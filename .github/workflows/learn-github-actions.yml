@@ -31,6 +31,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
+      - uses: actions/checkout@v4
+
       - name: change PR status
         run: |
           isDraft=${{ needs.check-PR-title.outputs.isDraft }}
