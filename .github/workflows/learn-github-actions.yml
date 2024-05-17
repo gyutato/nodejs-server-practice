@@ -36,7 +36,7 @@ jobs:
       - name: change PR status
         run: |
           isDraft=${{ needs.check-PR-title.outputs.isDraft }}
-          if [[ isDraft ]]; then
+          if [[ $isDraft == true ]]; then
             gh pr ready ${{ github.event.pull_request.number }} --undo
           else
             gh pr ready ${{ github.event.pull_request.number }}
