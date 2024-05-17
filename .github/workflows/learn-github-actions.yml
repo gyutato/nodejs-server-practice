@@ -11,4 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: echo The Title of your PR is ${{ github.event.pull_request.title }}
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+          DRAFT: "draft:"
+      - run: |
+          echo The Title of your PR is $TITLE
+          if [[ $TITLE == $DRAFT* ]]; then
+            echo "It's there!"
+          fi
