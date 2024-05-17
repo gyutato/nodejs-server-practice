@@ -6,8 +6,6 @@ jobs:
   create-draft-pr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
       - name: Check PR title
         run: |
           title=$(git rev-parse --abbrev-ref HEAD)^!/$GITHUB_HEAD_REF 
@@ -18,6 +16,7 @@ jobs:
 
       - uses: actions/github-script@v6
         with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           github-script: |
             github.issues.createPullRequest({
               title: context.ref,
