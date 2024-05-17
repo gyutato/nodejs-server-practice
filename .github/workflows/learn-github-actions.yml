@@ -25,6 +25,4 @@ jobs:
 
       - name: change PR status
         run: |
-          if [[ $isDraft == true ]]; then
-            echo "it's draft"
-          fi
+          echo $isDraft
