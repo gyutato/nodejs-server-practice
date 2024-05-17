@@ -1,6 +1,6 @@
 name: draft check
 
-run-name: Check if the PR is draft (${{ github.event.pull_request.number }})
+run-name: Check if the PR is draft (${{ github.event.pull_request.title }})
 
 on:
   pull_request:
