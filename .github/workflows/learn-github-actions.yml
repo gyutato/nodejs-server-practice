@@ -22,13 +22,16 @@ jobs:
           echo The Title of your PR is $title
           if [[ $title == draft:* ]]; then
             echo "It's there!"
-            echo "isDraft=hello" >> "$GITHUB_OUTPUT"
+            echo "isDraft=true" >> "$GITHUB_OUTPUT"
           fi
 
-  change-PR-stauss:
+  change-PR-status:
     runs-on: ubuntu-latest
     needs: check-PR-title
     steps:
       - name: change PR status
         run: |
-          echo ${{ needs.check-PR-title.outputs.isDraft }}
+          isDraft="${{ needs.check-PR-title.outputs.isDraft }}"
+          if [[ isDraft == true ]]; then
+            gh pr ready ${{ github.event.pull_request.node_id }} --undo
+          fi
